@@ -1,6 +1,9 @@
 IDRIS := idris
 PKG   := powerofpi
 
+PANDOC   := pandoc -f markdown+lhs -t markdown_github
+SED_HACK := sed 's/ sourceCode/idris/'
+
 .PHONY: build clean clean-all install rebuild doc doc-clean test
 
 all: build
@@ -29,3 +32,7 @@ docs-clean:
 
 test:
 	@$(IDRIS) --testpkg $(PKG).ipkg
+
+README.md: src/Data/Cryptol.lidr
+	@echo "# The Power of Pi\n" > README.md
+	@$(PANDOC) $< | $(SED_HACK) >>$@
