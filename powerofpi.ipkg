@@ -1,0 +1,17 @@
+package powerofpi
+
+modules    = Data.Cryptol
+-- tests      =
+
+brief      = "Implementations of ideas in The Power of Pi."
+version    = 0.0.1
+readme     = README.md
+license    = WTFPL
+author     = "Eric Bailey"
+
+homepage   = https://github.com/yurrriq/the-power-of-pi
+sourceloc  = https://github.com/yurrriq/the-power-of-pi
+bugtracker = https://github.com/yurrriq/the-power-of-pi/issues
+
+sourcedir  = src
+-- opts       =
