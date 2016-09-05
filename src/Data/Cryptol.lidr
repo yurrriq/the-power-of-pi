@@ -45,8 +45,6 @@ vector with `m + n` elements, leaving a vector with `n` elements remaining.
 It's entirely similar to [`splitAt`][splitAt] and could probably be deprecated
 in favor of it.
 
-[splitAt]:  https://github.com/idris-lang/Idris-dev/blob/v0.12.2/libs/base/Data/Vect.idr#L446-L452
-
 > public export
 > data TakeView : (a : Type) -> (m, n : Nat) -> Vect (m + n) a -> Type where
 >   Take : (xs : Vect m a) -> (ys : Vect n a) -> TakeView a m n (xs ++ ys)
@@ -64,14 +62,11 @@ efficient.
 > takeView (S k) (y :: ys') with (takeView k ys')
 >   takeView (S k) (y :: (ys ++ zs)) | (Take ys zs) = Take (y :: ys) zs
 
-Currently, my version of Idris is [having trouble][hang] with the following,
-so we'll exclude it for now.
+~~Currently, my version of Idris is [having trouble][hang] with the following,
+so we'll exclude it for now.~~
 
-```idris
-public export
-data SplitView : (m : Nat) -> Vect (m * n) a -> Type where
-  Split : (xss : Vect m (Vect n a)) -> SplitView m (concat xss)
-```
+*For whatever reason, this failed to type check for me on `0.12.2`,
+but works fine on `0.12.2-git:16b0fe8`.* :confused:
 
 [hang]: https://gist.github.com/yurrriq/a3a4ab7b5e409239fc494920133987ca
 

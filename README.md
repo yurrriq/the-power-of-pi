@@ -60,9 +60,11 @@ takeView (S k) (y :: ys') with (takeView k ys')
   takeView (S k) (y :: (ys ++ zs)) | (Take ys zs) = Take (y :: ys) zs
 ```
 
-Currently, my version of Idris is [having trouble](https://gist.github.com/yurrriq/a3a4ab7b5e409239fc494920133987ca) with the following, so we'll exclude it for now.
+~~Currently, my version of Idris is [having trouble](https://gist.github.com/yurrriq/a3a4ab7b5e409239fc494920133987ca) with the following, so we'll exclude it for now.~~
 
-``` idris
+*For whatever reason, this failed to type check for me on `0.12.2` but works fine on `0.12.2-git:16b0fe8`.* :confused:
+
+```idris
 public export
 data SplitView : (m : Nat) -> Vect (m * n) a -> Type where
   Split : (xss : Vect m (Vect n a)) -> SplitView m (concat xss)
