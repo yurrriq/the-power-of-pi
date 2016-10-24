@@ -74,3 +74,36 @@ efficient.
 > takeView (S k) (y :: ys') with (takeView k ys')
 >   takeView (S k) (y :: (ys ++ zs)) | (Take ys zs) = Take (y :: ys) zs
 
+> public export
+> data SplitView : {n : Nat} -> (m : Nat) -> Vect (m * n) a -> Type where
+>   Split : (xss : Vect m (Vect n a)) -> SplitView m (concat xss)
+
+> takeLemma : (ys : Vect n a) -> (zs : Vect m a) -> take n (ys ++ zs) = ys
+> takeLemma []        zs = Refl
+> takeLemma (y :: ys) zs = cong (takeLemma ys zs)
+
+> dropLemma : (ys : Vect n a) -> (zs : Vect m a) -> drop n (ys ++ zs) = zs
+> dropLemma []        zs = Refl
+> dropLemma (y :: ys) zs = dropLemma ys zs
+
+> splitConcatLemma : (xs : Vect (m * n) a) -> concat (split n m xs) = xs
+> splitConcatLemma {m = Z} [] = Refl
+> splitConcatLemma {m = S k} {n} xs with (takeView n xs)
+>   splitConcatLemma {m = S k} {n} (ys ++ zs) | (Take ys zs) =
+>     let inductiveHypothesis = splitConcatLemma zs {m=k} {n=n} in
+>       rewrite takeLemma ys zs in
+>       rewrite dropLemma ys zs in
+>       rewrite inductiveHypothesis in
+>               Refl
+
+> export
+> splitView : (n, m : Nat) -> (xs : Vect (m * n) a) -> SplitView m xs
+> splitView n m xs =
+>   let prf  = sym (splitConcatLemma xs {m = m} {n = n})
+>       view = Split (split n m xs) {n = n} in
+>   rewrite prf in view
+
+> export
+> swab : Word 32 -> Word 32
+> swab xs with (splitView 8 4 xs)
+>   swab _ | Split [a, b, c, d] = concat [b, a, c, d]
