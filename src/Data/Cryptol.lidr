@@ -10,12 +10,24 @@ cryptographic protocols developed by [Galois, Inc][Galois].
 
 > module Data.Cryptol
 
-Since we'll need to operate on vectors, we import the [`Vect` data type][Vect].
+Since we'll need to operate on vectors, we import [`Data.Vect`], which provides
+the `Vect` data type.
 
 > import Data.Vect
 
-[Vect]: https://github.com/idris-lang/Idris-dev/blob/v0.12.2/libs/base/Data/Vect.idr
+[`Data.Vect`]: https://github.com/idris-lang/Idris-dev/blob/v0.12.2/libs/base/Data/Vect.idr
 
+**TODO**: Describe `Bit`s and `Word`s.
+
+> public export
+> data Bit : Type where
+>   O : Bit
+>   I : Bit
+
+> ||| A binary word is a vector of bits.
+> public export
+> Word : Nat -> Type
+> Word n = Vect n Bit
 
 `Data.Vect` provides [`splitAt`][splitAt]:
 
@@ -62,22 +74,3 @@ efficient.
 > takeView (S k) (y :: ys') with (takeView k ys')
 >   takeView (S k) (y :: (ys ++ zs)) | (Take ys zs) = Take (y :: ys) zs
 
-~~Currently, my version of Idris is [having trouble][hang] with the following,
-so we'll exclude it for now.~~
-
-*For whatever reason, this failed to type check for me on `0.12.2`,
-but works fine on `0.12.2-git:16b0fe8`.* :confused:
-
-[hang]: https://gist.github.com/yurrriq/a3a4ab7b5e409239fc494920133987ca
-
-**TODO**: Describe `Bit`s and `Word`s.
-
-> public export
-> data Bit : Type where
->   O : Bit
->   I : Bit
-
-> ||| A binary word is a vector of bits.
-> public export
-> Word : (n : Nat) -> Type
-> Word n = Vect n Bit
