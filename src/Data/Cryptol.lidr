@@ -186,3 +186,24 @@ efficient.
 >       char '\n' >>
 >       Base (VECT n (VECT m BIT)) >>= \bs =>
 >       End
+
+=== Generic parsers
+
+> export
+> parse : (f : Format) -> List Bit -> Maybe (Fmt f, List Bit)
+> parse Bad bs       = Nothing
+> parse End bs       = Just ((), bs)
+> parse (Base u) bs  = read u bs
+> parse (Plus f1 f2) bs with (parse f1 bs)
+>   | Just (x, cs)   = Just (Left x, cs)
+>   | Nothing with (parse f2 bs)
+>     | Just (y, ds) = Just (Right y, ds)
+>     | Nothing      = Nothing
+> parse (Skip f1 f2) bs with (parse f1 bs)
+>   | Nothing        = Nothing
+>   | Just (_, cs)   = parse f2 cs
+> parse (Read f1 f2) bs with (parse f1 bs)
+>   | Nothing        = Nothing
+>   | Just (x, cs) with (parse (f2 x) cs)
+>     | Nothing      = Nothing
+>     | Just (y, ds) = Just ((x ** y), ds)
